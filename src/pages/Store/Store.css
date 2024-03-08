@@ -1,0 +1,112 @@
+.container {
+    display: flex;
+}
+
+/*           filter               */
+
+.filter-section {
+    width: 100%;
+    text-align: start;
+    padding: 3rem 1rem;
+    max-width: 250px;
+}
+
+.filter-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.filter-section label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.filter-section input[type="checkbox"],
+.filter-section input[type="radio"] {
+    margin-right: 10px;
+    width: 1.2rem;
+    height: 1.2rem;
+    transition: 150ms transform ease-in-out;
+}
+
+.filter-section input[type="checkbox"]:checked,
+.filter-section input[type="radio"]:checked {
+    accent-color: #333;
+    transform: scale(1.25);
+}
+
+
+/*                          */
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 20px;
+    padding: 3rem 1rem;
+}
+
+.medicine-card {
+    padding: 10px;
+}
+
+.medicine-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.medicine-details {
+    padding: 10px;
+}
+
+.medicine-name {
+    font-size: 18px;
+    margin: 0;
+}
+
+.medicine-description {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.medicine-price,
+.medicine-stock {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.medicine-name,
+.medicine-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .filter-section {
+        width: 100%;
+        text-align: center;
+    }
+
+    label {
+        margin-left: 2rem;
+    }
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 10px;
+}
