@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 class OrderService {
-    private static BASE_URL = 'http://localhost:5001/api/orders';
+    private static BASE_URL = 'http://localhost:3001/api/orders';
 
     static async placeOrder(orderDto: OrderDto): Promise<void> {
         try {

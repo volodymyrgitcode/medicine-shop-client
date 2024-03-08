@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Shop } from '../models/Shop';
 
 class shopService {
-    private static BASE_URL = 'http://localhost:5001/api/shops';
+    private static BASE_URL = 'http://localhost:3001/api/shops';
 
     static async getShops(): Promise<Shop[]> {
         try {

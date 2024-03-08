@@ -157,10 +157,12 @@ function Store() {
                     </ul>
                 </div>
 
-                <div>
+                <div className="grid-container">
+
                     <div className="products-grid">
                         {medicines.map((medicine) => <MedicineCard key={medicine.id} onAddToCart={handleAddToCart} isAdded={!!cartItems.find(e => medicine.id === e.id)} medicine={medicine}></MedicineCard>)}
                     </div>
+
                     <div className="pagination">
                         <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>Back</button>
                         <span>{currentPage} of {totalPages}</span>

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Medicine } from '../models/Medicine';
 
 class MedicineService {
-    private static BASE_URL = 'http://localhost:5001/api/medicines';
+    private static BASE_URL = 'http://localhost:3001/api/medicines';
 
     static async getMedicines(options: {
         shopIds?: string[],
