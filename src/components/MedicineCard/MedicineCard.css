@@ -1,0 +1,66 @@
+.medicine-card {
+    font-size: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.img-container {
+    border-radius: 5px;
+    padding-top: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.img-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.medicine-card:hover img {
+    transform: scale(1.1);
+}
+
+.medicine-card:hover {
+    cursor: pointer;
+}
+
+.medicine-name,
+.medicine-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.medicine-name {
+    font-size: 1.25rem;
+    margin: 1em 0 0.5em 0;
+}
+
+.medicine-description {
+    opacity: 0.9;
+    font-size: 1rem;
+    margin: 0.5em 0;
+}
+
+.medicine-details {
+    padding: 0 5px;
+}
+
+.price-button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.price-button-container button {
+    padding: 1.25em 1.25em;
+    height: 100%;
+}

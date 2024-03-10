@@ -1,24 +1,23 @@
-import './App.css'
-import Store from './pages/Store/Store.tsx'
-import NotFoundPage from './pages/NotFoundPage.tsx'
-import Navbar from './components/navbar/Navbar.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Cart from './pages/Cart/Cart.tsx'
+import Store from './pages/Store/Store';
+import NotFound from './pages/NotFound/NotFound';
+import MainLayout from './layout/MainLayout';
+import { Cart } from './pages/Cart/Cart';
 
 const router = createBrowserRouter([
   {
-    element: <Navbar />,
+    element: <MainLayout />,
     children: [
       {
         path: '/',
         element: <Store />,
       },
       {
-        path: '/cart',
+        path: '/Cart',
         element: <Cart />,
       }
     ],
-    errorElement: <NotFoundPage />
+    errorElement: <NotFound />
   },
 ]);
 
@@ -28,5 +27,4 @@ function App() {
       <RouterProvider router={router} />
     </>)
 }
-
 export default App

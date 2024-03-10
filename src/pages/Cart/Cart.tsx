@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
-import CartService from '../../services/cartService';
-import { CartItem } from '../../models/CartItem';
-import './Cart.css';
-import OrderService from '../../services/orderService';
+import { useEffect, useState } from "react";
+import { CartItem } from "../../models/CartItem";
+import { CartService } from "../../services/cartService";
+import "./Cart.css";
+import { OrderService } from "../../services/orderService";
+import { Order } from "../../models/Order";
+import { useNavigate } from 'react-router-dom';
 
-const NewCart = () => {
+export function Cart() {
+
+    const navigate = useNavigate();
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
     const [formData, setFormData] = useState({
@@ -29,19 +33,6 @@ const NewCart = () => {
         setCartItems(items);
     };
 
-    const handleRemoveItem = (id: string) => {
-        const updatedItems = CartService.removeCartItem(id);
-        setCartItems(updatedItems);
-    };
-
-    const calculateSubtotal = (price: string, quantity: number): number => {
-        return parseFloat(price) * quantity;
-    };
-
-    const calculateTotalPrice = (): number => {
-        return cartItems.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0);
-    };
-
     const handleQuantityChange = (itemId: string, newQuantity: number) => {
         const itemToUpdate = cartItems.find(item => item.id === itemId);
 
@@ -57,6 +48,19 @@ const NewCart = () => {
         setCartItems(updatedItems);
 
         CartService.updateCartItemQuantity(itemId, newQuantity);
+    };
+
+    const handleRemoveItem = (id: string) => {
+        const updatedItems = CartService.removeCartItem(id);
+        setCartItems(updatedItems);
+    };
+
+    const calculateSubtotal = (price: string, quantity: number): number => {
+        return parseFloat(price) * quantity;
+    };
+
+    const calculateTotalPrice = (): number => {
+        return cartItems.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0);
     };
 
     const validateForm = () => {
@@ -94,92 +98,116 @@ const NewCart = () => {
             isValid = false;
         }
 
+        if (cartItems.length <= 0) {
+            isValid = false;
+        }
+
         setFormErrors(errors);
         return isValid;
     };
 
     const handleSubmitOrder = () => {
         if (validateForm()) {
-            const orderDto = {
+            const order: Order = {
                 medicines: cartItems.map(item => ({ medicineId: item.id, quantity: item.quantity })),
                 ...formData,
                 totalPrice: calculateTotalPrice()
             };
 
-            OrderService.placeOrder(orderDto)
+            console.log(order);
+
+            OrderService.placeOrder(order)
                 .then((res) => {
-                    // Handle the response from the server here
                     console.log('Order placed successfully!', res);
-                    // Optionally, you can do something with the response, like redirecting the user to a thank you page
+                    CartService.resetCartItems();
+                    navigate("/");
                 })
-                .catch(error => {
-                    console.error('Error placing order:', error);
-                });
         }
     };
 
+    if (cartItems.length <= 0) {
+        return (
+            <>
+                <div className="empty-cart-container">
+                    <h1>Your cart is empty right now.</h1>
+                    <p>Explore products section and add items to your shopping cart</p>
+                    <button className="button-primary" onClick={() => navigate('/')}>
+                        Start Shopping
+                    </button>
+                </div>
+            </>
+        );
+    }
+
     return (
-        <div className="cart-container">
-            <h1>Your Cart</h1>
-            {cartItems.length === 0 ? (
-                <p>Your cart is empty</p>
-            ) : (
-                <div>
-                    <table className="cart-table">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Subtotal</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cartItems.map(item => (
-                                <tr key={item.id}>
-                                    <td><img src={item.imageUrl} alt={item.name} className="item-image" /></td>
-                                    <td className="product-desc"><span className="product-name">{item.name}</span><br />{item.description}</td>
-                                    <td>{item.price}</td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            value={item.quantity || 1}
-                                            min="1"
-                                            onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
-                                        />
-                                    </td>
-                                    <td>{calculateSubtotal(item.price, item.quantity)}</td>
-                                    <td><button onClick={() => handleRemoveItem(item.id)} className="remove-button">Remove</button></td>
-                                </tr>
-                            ))}
-                            <tr>
-                                <td colSpan={4} className="total-label">Total:</td>
-                                <td className="total-price" colSpan={2}>${calculateTotalPrice().toFixed(2)}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div className="order-form">
-                        <h2>Submit Order</h2>
-                        <label>Username:</label>
-                        <input type="text" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} required />
-                        {formErrors.username && <span className="error">{formErrors.username}</span>}
-                        <label>Email:</label>
-                        <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                        {formErrors.email && <span className="error">{formErrors.email}</span>}
-                        <label>Address:</label>
-                        <input type="text" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
-                        {formErrors.address && <span className="error">{formErrors.address}</span>}
-                        <label>Phone Number:</label>
-                        <input type="tel" value={formData.phoneNumber} onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} />
-                        {formErrors.phoneNumber && <span className="error">{formErrors.phoneNumber}</span>}
-                        <button onClick={handleSubmitOrder}>Submit Order</button>
+        <>
+            <h1>
+                Your shopping cart
+            </h1>
+            <>
+                <div className="cart-container">
+
+                    {
+                        cartItems.map(item => (
+                            <div className="cart-item-container" key={item.id}>
+                                <div className="cart-item-img-container">
+                                    <img src={item.imageUrl} alt={item.name} className="" />
+                                </div>
+                                <div className="cart-item-details">
+                                    <h2 className="cart-item-name">{item.name}</h2>
+                                    <p className="cart-item-description">{item.description}</p>
+                                </div>
+                                <p className="cart-item-price">{item.price}</p>
+                                <input
+                                    type="number"
+                                    value={item.quantity}
+                                    min="1"
+                                    onChange={(e) => { handleQuantityChange(item.id, Number(e.target.value)) }}
+                                />
+                                <p className="cart-item-subtotal">{(calculateSubtotal(item.price, item.quantity)).toFixed(2)}</p>
+                                <button
+                                    className="button-primary"
+                                    onClick={() => handleRemoveItem(item.id)}
+                                >
+                                    Remove
+                                </button>
+                            </div>
+
+                        ))
+                    }
+
+                    <div className="total-container">
+                        <h3>
+                            Total price:
+                        </h3>
+                        <p>
+                            ${calculateTotalPrice().toFixed(2)}
+                        </p>
                     </div>
                 </div>
-            )}
-        </div>
-    );
-};
 
-export default NewCart;
+                <div className="order-form">
+                    <h2>Submit Order</h2>
+                    <label>Username:</label>
+                    <input type="text" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} required />
+                    {formErrors.username && <span className="error">{formErrors.username}</span>}
+                    <label>Email:</label>
+                    <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                    {formErrors.email && <span className="error">{formErrors.email}</span>}
+                    <label>Address:</label>
+                    <input type="text" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
+                    {formErrors.address && <span className="error">{formErrors.address}</span>}
+                    <label>Phone Number:</label>
+                    <input type="tel" value={formData.phoneNumber} onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })} />
+                    {formErrors.phoneNumber && <span className="error">{formErrors.phoneNumber}</span>}
+                    <button
+                        className="button-primary"
+                        onClick={handleSubmitOrder}
+                    >Submit Order
+                    </button>
+                </div>
+            </>
+
+        </>
+    );
+}

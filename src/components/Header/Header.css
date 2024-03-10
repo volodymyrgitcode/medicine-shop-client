@@ -1,0 +1,38 @@
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 0.5em 0 0.5em;
+}
+
+nav ul li .active {
+    color: #2373ff;
+}
+
+nav ul li a {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+
+    nav,
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav,
+    nav ul li {
+        margin: 10px 0;
+    }
+}
