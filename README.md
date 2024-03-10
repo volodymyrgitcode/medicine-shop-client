@@ -47,6 +47,16 @@ cd <project_directory>
 npm install 
 ```
 
+* Create a .env file in the root directory of your project with the necessary configuration parameters. This project requires MySQL as the database.
+
+```
+VITE_API_BASE_URL=<yor_api_base_url>
+```
+Example
+```
+VITE_API_BASE_URL=http://localhost:3001
+```
+
 * Run the app:
 ```
 npm run dev
